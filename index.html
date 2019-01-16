@@ -1,0 +1,99 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>Ejemplo polylines</title>
+    <!-- Los estilos de leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+
+    <!-- Mis estilos -->
+    <style>
+        #mapid{
+            height: 600px;
+            width: 1200px;
+        }
+    </style>
+</head>
+ <body>
+<h3>Ejemplo de ruta con leaflet.js</h3>
+ <div id="mapid"></div>
+ <!-- EL icono fue extraído de flaticon -->
+ <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"
+      title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"
+      title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+ <!-- Javascript de leaftlef -->
+ <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+         integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+         crossorigin=""></script>
+
+ <!-- Mi javascript -->
+ <script>
+     //Mi icono
+
+     var icon = L.icon({
+         iconUrl: 'ghost.png',
+         iconSize: [20, 20], // size of the icon
+     });
+
+     //Esto simula el json que  traigo de mi base de datos
+    var json = [
+        [11.029479,-74.8076453],
+        [11.028873,-74.8070823],
+        [11.028341,-74.8066743],
+        [11.027604,-74.8060093],
+        [11.027028,-74.8050647],
+        [11.0245273,-74.8043527],
+        [11.0235483,-74.8034517],
+        [11.0208286,-74.8000513],
+        [11.0199153,-74.7987372],
+        [11.0194403,-74.7983782],
+        [11.0187983,-74.7978982],
+        [11.0179853,-74.7972762],
+        [11.0173003,-74.7968572],
+        [11.0165893,-74.7961802],
+        [11.0155063,-74.7955112],
+        [11.0147045,-74.7948133],
+        [11.0137273,-74.7941322]
+    ];
+
+     //Creamos el mapa
+     var map = L.map('mapid').setView([10.9858321,-74.7964877], 13);
+     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+         attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://cloudmade.com">CloudMade</a>',
+         maxZoom: 20
+     }).addTo(map);
+
+     cargarRuta(json);
+
+
+      //La función que carga la ruta. Se le pasa un parámetro que es el json con la ruta a mostrar
+     function cargarRuta(arr){
+         //declaramos un arreglo llamado list (O como te de la gana)
+         var list = [];
+        //Si pasamos un array vacío se rompe asíq ue primero verificamos que no esté vacío nuestro array
+        if(arr.length > 0){
+            //Iteramos nuestro arreglo de posiciones
+            arr.forEach(function (mar, i) {
+                list.push(new L.LatLng(mar[0],mar[1]));
+            });
+            //Creamos la ruta pasando list
+            console.log(list);
+            var poly = new L.Polyline(list, {
+                color:"blue", //Yo puse azul pero puedes usar un código hex, por ejemplo color:"#FF5733"
+                weight:3,
+                opacity: 0.7,
+                smoothFactor: 1
+            });
+            poly.addTo(map);
+            //Suponiendo que las posiciones van de las màs recientes a las màs antigua voy a colcoar el marcador en la primera
+            L.marker(json[0], {icon: icon}).addTo(map);
+        }
+        else{
+            alert("No hay datos para mostrar");
+        }
+     }
+ </script>
+ </body>
+</html>
